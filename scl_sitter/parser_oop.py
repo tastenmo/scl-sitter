@@ -664,23 +664,6 @@ def get_parse_errors(tree: Tree) -> List[Dict[str, Any]]:
 
 def extract_type_definitions(tree: Tree) -> Dict[str, Any]:
     """Extract type definitions from parse tree (backward compatibility)."""
-    parser = get_default_parser()
-    extractor = SCLTypeExtractor()
-    type_defs = extractor.extract_type_definitions(tree)
-    
-    # Convert to old format
-    result = {}
-    for name, typedef in type_defs.items():
-        if typedef.category == "ArrayType" and typedef.array_info:
-            # Array type - return array info dict
-            result[name] = {
-                "element_type": typedef.array_info.element_type,
-                "dimensions": typedef.array_info.dimensions,
-                "total_elements": typedef.array_info.total_elements,
-                "is_multi_dimensional": typedef.array_info.is_multi_dimensional
-            }
-        else:
-            # Struct type - return fields dict
-            result[name] = typedef.fields
-    
-    return result
+    # Use the original parser's implementation for full backward compatibility
+    from .parser import extract_type_definitions as original_extract
+    return original_extract(tree)
