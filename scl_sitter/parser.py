@@ -493,3 +493,5 @@ def _extract_field_info(field_node):
     extract_field_details(field_node)
     return field_info if field_info['name'] else None
 
+
+
