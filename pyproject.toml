@@ -1,50 +1,31 @@
+# pyproject.toml
+
+## CHANGE: The project is now defined using the standard `[project]` table (PEP 621)
+## instead of the Poetry-specific `[tool.poetry]` table. This is more universal.
 [project]
 name = "scl-sitter"
 version = "0.1.0"
-description = "SCL parser for parsing Siemens SCL code using tree-sitter"
+description = "An advanced SCL parser and tag resolver using tree-sitter, with an integrated GUI."
 authors = [
-    {name = "Martin Heubuch",email = "martin.heubuch@spie-escad.de"}
+    {name = "Martin Heubuch", email = "martin.heubuch@spie-escad.de"}
 ]
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.10"
+
+# Dependencies for the library to run.
 dependencies = [
-    "tree-sitter (>=0.25.2,<0.26.0)",
-    "tree-sitter-scl @ file:///C:/projects/tree-sitter/tree-sitter-scl"
+    "tree-sitter>=0.21.0"
 ]
 
+## CHANGE: The entry point for the GUI is now correctly defined.
+## This creates the 'scl-sitter-gui' command when the package is installed.
+[project.scripts]
+scl-sitter-gui = "scl_sitter.gui:main"
 
+
+## CHANGE: The build system is explicitly set to use `setuptools`.
+## This is the most reliable backend for building Python packages with C extensions,
+## which is exactly what this project is.
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.4.2"
-pytest-mock = "^3.15.1"
-pytest-cov = "^7.0.0"
-
-[tool.pytest.ini_options]
-minversion = "6.0"
-addopts = "-ra -q --tb=short"
-testpaths = [
-    "tests",
-]
-python_files = [
-    "test_*.py",
-    "*_test.py",
-]
-python_classes = [
-    "Test*",
-]
-python_functions = [
-    "test_*",
-]
-markers = [
-    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
-    "gui: marks tests that require GUI components",
-    "integration: marks tests as integration tests",
-]
-filterwarnings = [
-    "ignore::DeprecationWarning",
-    "ignore::PendingDeprecationWarning",
-]
-
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"

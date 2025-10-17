@@ -1,55 +1,31 @@
+# scl_sitter/__init__.py
+
 """
-SCL Sitter - SCL (Structured Control Language) Parser
+SCL Sitter - A Python Toolkit for Siemens SCL
 
-This package provides both functional and object-oriented interfaces 
-for parsing SCL code using tree-sitter.
+This package provides a powerful, object-oriented interface for parsing SCL code.
+It features a project-aware parser that can build a symbol table (dictionary) of
+User-Defined Types (UDTs) to accurately resolve the full tag structure of Data Blocks.
 
-Available interfaces:
-- Functional: parse_scl_code(), parse_scl_file(), get_parse_errors(), etc.
-- Object-oriented: SCLParser class with improved state management and features
+The package also includes a GUI application for interactive analysis.
 """
 
 __version__ = "0.1.0"
 
-# Import functional interface (backward compatibility)
-from .parser import (
-    parse_scl_code,
-    parse_scl_file, 
-    walk_tree,
-    get_parse_errors,
-    extract_type_definitions
-)
+## CHANGE: The import list is drastically simplified.
+## We only expose the main SCLParser class for developers to use as a library.
+## The old, flawed functional API and dataclasses are no longer exposed.
+from .parser_oop import SCLParser
 
-# Import object-oriented interface (recommended)
-from .parser_oop import (
-    SCLParser,
-    SCLParseResult,
-    ParseError,
-    NodeInfo,
-    FieldInfo,
-    ArrayTypeInfo,
-    TypeDefinition,
-    SCLTypeExtractor,
-    SCLTreeWalker
-)
+## CHANGE: The gui module is imported separately.
+## This is done so the `pyproject.toml` [project.scripts] entry point can find it.
+## We do not add the `gui` module to `__all__` because it's not meant to be
+## imported by other developers' code, only run as a script.
+from . import gui
 
-# Convenience imports for both interfaces
+
+## CHANGE: The __all__ list is now very clean.
+## It tells Python that `from scl_sitter import *` should only import SCLParser.
 __all__ = [
-    # Functional interface
-    "parse_scl_code",
-    "parse_scl_file", 
-    "walk_tree",
-    "get_parse_errors",
-    "extract_type_definitions",
-    
-    # Object-oriented interface
     "SCLParser",
-    "SCLParseResult", 
-    "ParseError",
-    "NodeInfo",
-    "FieldInfo", 
-    "ArrayTypeInfo",
-    "TypeDefinition",
-    "SCLTypeExtractor",
-    "SCLTreeWalker"
 ]
